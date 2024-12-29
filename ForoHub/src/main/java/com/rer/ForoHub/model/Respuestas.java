@@ -1,23 +1,45 @@
 package com.rer.ForoHub.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 @Entity
+@Table(name = "respuestas")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Respuestas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "contenido", nullable = false)
-    private String contenido;
-    @Column(name = "fecha", nullable=false)
-    private LocalDateTime fecha;
+    @Column(name = "mensaje_respuestas")
+    private String mensaje_respuestas;
+    @Column(name = "fecha_creacion_respuestas")
+    private LocalDate fecha_creacion_respuestas;
+    @Column(name = "solucion")
+    private Boolean solucion;
     @ManyToOne
-    @JoinColumn(name = "consulta_id")
-    private Consultas consulta;
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario_respuesta;
-    // Getters y Setters
-}
+    @JoinColumn(name = "topico_id")
+    private Topico topico;
 
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+    public String getMensaje_respuestas() {return mensaje_respuestas;}
+    public void setMensaje_respuestas(String mensaje_respuestas) {this.mensaje_respuestas = mensaje_respuestas;}
+    public LocalDate getFecha_creacion_respuestas() {return fecha_creacion_respuestas;}
+    public void setFecha_creacion_respuestas(LocalDate fecha_creacion_respuestas) {this.fecha_creacion_respuestas = fecha_creacion_respuestas;}
+    public Boolean getSolucion() {return solucion;}
+    public void setSolucion(Boolean solucion) {this.solucion = solucion;}
+    public Topico getTopico() {return topico;}
+    public void setTopico(Topico topico) {this.topico = topico;}
+    @Override
+    public String toString() {
+        return "Respuestas{" +
+                "mensaje_respuestas='" + mensaje_respuestas + '\'' +
+                ", fecha_creacion_respuestas=" + fecha_creacion_respuestas +
+                ", solucion=" + solucion +
+                ", topico=" + topico +
+                '}';
+    }
+}
