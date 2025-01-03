@@ -1,53 +1,44 @@
 package com.rer.ForoHub.security;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
 
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtConfiguracion jwtConfig;
-
-    public JwtAuthenticationFilter(JwtConfiguracion jwtConfig) {
-        this.jwtConfig = jwtConfig;
-    }
+    @Autowired
+    JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = obtenerToken(request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        if (token != null && !token.isEmpty()) {
+        String token = request.getHeader("Authorization");
+
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
             try {
-                Jws<Claims> claims = Jwts.parser()
-                        .setSigningKey(jwtConfig.getClaveSecreta())
-                        .parseClaimsJws(token);
-
-                String username = claims.getBody().getSubject();
-                List<SimpleGrantedAuthority> authorities = obtenerRoles(claims);
-
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            } catch (JwtException | IllegalArgumentException e) {
-                // Manejo de errores, token no válido
+                if (jwtUtil.validarToken(token)) {
+                    String username = jwtUtil.extraerUsername(token);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            username, null, null);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token no válido");
+                return;
             }
         }
-
         filterChain.doFilter(request, response);
     }
-
-    private String obtenerToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
-
-    private List<SimpleGrantedAuthority> obtenerRoles(Jws<Claims> claims) {
-        List<String> roles = claims.getBody().get("roles", List.class);
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
 }
+
 

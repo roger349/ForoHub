@@ -8,48 +8,91 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
-<body style=" background-image:url(../static/img/fondoAluramarron.png); background-size:cover;">
-     <div><img id="logoAlura" src="../static/img/alura.svg" alt=""> </div>
-     <div class="cointainer">
-        <div id="cuadroOpcion" class="row" >
-            <div id="Seleccionar" class="col-3">
-                <p><strong>Topicos Recientes</strong></p>
-                   <form>
-                       <label for="Categorias"></label>
-                           <select id="Categorias">
-                               <option>Selecione Categoria para Mostrar</option>
-                               <option value="Programacion">Programacion</option>
-                               <option value="FrontEnd">Front End</option>
-                               <option value="BackEnd">Back End</option>
-                               <option value="DataScience">Data Science</option>
-                               <option value="DevOps">DevOps</option>
-                           </select>
-                   </form>
-            </div>
-            <div id="botones" class="col-5">
-                 <button class="botonTodos" type="button">Todos</button>
-                 <button class="botonSinResolver" type="button">Sin Resolver</button>
-                 <button class="botonResueltos" type="button">Resueltos</button>
-            </div>
-            <div class="col-4">
-                 <form class="topico">
-                     <button class="botonCrearTopico" type="button">Crear Nuevo Topico</button>
-                     <label for="textoIngresado"></label>
-                     <textarea id="textoIngresado" style="resize:none" placeholder="Busque por Tema"></textarea>
-                     <button class="botonBuscar" type="button" onclick="mostrarTextoEncriptado()" style="border:none">
-                         <img id="logoBuscar" src="../static/img/buscar4.png" alt=""></button>
-                 </form>
-             </div>
+<body style="background-image:url(../static/img/fondoAluramarron.png); background-size:cover;">
+<div><img id="logoAlura" src="../static/img/alura.svg" alt=""></div>
+<div class="container">
+    <div id="cuadroOpcion" class="row">
+        <div id="Seleccionar" class="col-3">
+            <p><strong>Topicos Recientes</strong></p>
+            <form>
+                <label for="Categorias"></label>
+                <select id="Categorias">
+                    <option>Seleccione Categoria para Mostrar</option>
+                    <option value="Programacion">Programación</option>
+                    <option value="FrontEnd">Front End</option>
+                    <option value="BackEnd">Back End</option>
+                    <option value="DataScience">Data Science</option>
+                    <option value="DevOps">DevOps</option>
+                </select>
+            </form>
         </div>
-        <div id="cuadroMostrar" class="row">
-                     <form>
-                         <label for="salidadTexto"></label>
-                         <textarea id="salidadTexto" style="resize:none"></textarea>
-                         <!--<button class="botonCopiar" type="button" onclick="copyToClipboard()">Copiar</button>-->
-                     </form>
+        <div id="botones" class="col-5">
+            <button class="botonTodos" type="button">Todos</button>
+            <button class="botonSinResolver" type="button">Sin Resolver</button>
+            <button class="botonResueltos" type="button">Resueltos</button>
         </div>
-     </div>
-    <footer><strong>RogerE.Roldan/2024/AppForo</strong></footer>
-    <script src="../static/js/funciones.js"></script>
+        <div class="col-4">
+            <form class="topico">
+                <button id="crearTopicoBtn" class="botonCrearTopico" type="button">Crear Nuevo Topico</button>
+                <label for="textoIngresado"></label>
+                <textarea id="textoIngresado" style="resize:none" placeholder="Busque por Tema"></textarea>
+                <button class="botonBuscar" type="button" onclick="mostrarTextoEncriptado()" style="border:none">
+                    <img id="logoBuscar" src="../static/img/buscar4.png" alt=""></button>
+            </form>
+        </div>
+    </div>
+
+        <!-- Mostrar Tópicos y Respuestas -->
+        <div id="topicosListados" class="col-12">
+            <!-- Este contenedor se llenará dinámicamente con los tópicos -->
+            <!-- Ejemplo de un tópico -->
+            <div class="topicoItem" id="topico1">
+                <h5>Título del Tópico</h5>
+                <p>Descripción del tópico...</p>
+
+                <!-- Para los usuarios comunes -->
+                <div class="respuestaUsuarioComun hide">
+                    <textarea placeholder="Escribe tu respuesta..." style="resize:none"></textarea>
+                    <button class="btn btn-primary">Enviar Respuesta</button>
+                </div>
+
+                <!-- Para el administrador -->
+                <div class="accionesAdmin hide">
+                    <button class="btn btn-warning" onclick="editarTopico(1)">Editar Tópico</button>
+                    <button class="btn btn-danger" onclick="eliminarTopico(1)">Eliminar Tópico</button>
+                </div>
+
+                <div class="respuestas">
+                    <!-- Respuestas del tópico -->
+                    <div class="respuesta">
+                        <p>Respuesta 1</p>
+                        <!-- Respuestas del administrador -->
+                        <div class="accionesAdmin hide">
+                            <button class="btn btn-warning">Editar Respuesta</button>
+                            <button class="btn btn-danger">Eliminar Respuesta</button>
+                        </div>
+                    </div>
+                    <div class="respuesta">
+                        <p>Respuesta 2</p>
+                        <!-- Respuestas del administrador -->
+                        <div class="accionesAdmin hide">
+                            <button class="btn btn-warning">Editar Respuesta</button>
+                            <button class="btn btn-danger">Eliminar Respuesta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Panel de Administración -->
+<div id="adminPanel" class="hide">
+    <a href="/admin/usuarios" class="btn btn-info">Ir a Panel de Usuarios</a>
+</div>
+
+<footer><strong>RogerE.Roldan/2024/AppForo</strong></footer>
+<script src="../static/js/funciones.js"></script>
+<script src="../static/js/roles.js"></script>
 </body>
 </html>

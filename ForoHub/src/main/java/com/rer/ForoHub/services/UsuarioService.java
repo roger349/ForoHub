@@ -1,8 +1,13 @@
 package com.rer.ForoHub.services;
 
+import com.rer.ForoHub.model.Roles;
 import com.rer.ForoHub.model.Usuario;
 import com.rer.ForoHub.repository.UsuarioRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -10,31 +15,41 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepo;
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
-    public Usuario createUsuario(Usuario usuario) {
-        return usuarioRepo.save(usuario);
-    }
-    public List<Usuario> getAllUsuarios() {
-        return usuarioRepo.findAll();
-    }
-    public Optional<Usuario> getUsuarioById(Long id) {
-        return usuarioRepo.findById(id);
-    }
-    public Usuario updateUsuario(Long id, Usuario usuarioDetails) {
-        Optional<Usuario> existingUsuario = usuarioRepo.findById(id);
-        if (existingUsuario.isPresent()) {
-            Usuario usuario = existingUsuario.get();
-            usuario.setNombre(usuarioDetails.getNombre());
-            usuario.setCorreo_Electronico(usuarioDetails.getCorreo_Electronico());
-            usuario.setContraseña(usuarioDetails.getContraseña());
-            return usuarioRepo.save(usuario);
+    @Autowired
+    UsuarioRepository usuarioRepo;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public Usuario registrarUsuario(Usuario usuario) {
+        if (usuarioRepo.findByNombre_usuario(usuario.getNombre_usuario()) != null) {
+            logger.error("Usuario {} ya existe", usuario.getNombre_usuario());
+            throw new UsuarioExistenteException("El usuario ya existe");
         }
-        return null;
+        usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
+        usuario.setRol(Roles.ROLE_USUARIO);
+        try {
+            usuarioRepo.save(usuario);
+            logger.info("Usuario {} registrado correctamente", usuario.getNombre_usuario());
+            return usuario;
+        } catch (DataAccessException e) {
+            logger.error("Error al registrar usuario: {}", e.getMessage());
+            throw new RuntimeException("Error al registrar usuario", e);
+        }
     }
+    public List<Usuario> getAllUsuarios() {return usuarioRepo.findAll();}
+    public Optional<Usuario> getUsuarioById(Long id) {return usuarioRepo.findById(id);}
+    public Usuario updateUsuario(Long id, Usuario usuarioDetails) {return usuarioDetails;}
     public void deleteUsuario(Long id) {
-        usuarioRepo.deleteById(id);
+        try {
+            usuarioRepo.deleteById(id);
+            logger.info("Usuario con ID {} eliminado correctamente", id);
+        } catch (DataAccessException e) {
+            logger.error("Error al eliminar usuario: {}", e.getMessage());
+            throw new RuntimeException("Error al eliminar usuario", e);
+        }
     }
 }
+
 

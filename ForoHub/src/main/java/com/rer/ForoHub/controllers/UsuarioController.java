@@ -2,6 +2,7 @@ package com.rer.ForoHub.controllers;
 
 import com.rer.ForoHub.model.Usuario;
 import com.rer.ForoHub.services.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,17 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioServ;
 
-    @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
-        Usuario createdUsuario = usuarioServ.createUsuario(usuario);
-        return new ResponseEntity<>(createdUsuario, HttpStatus.CREATED);
-    }
     @GetMapping
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         List<Usuario> usuarios = usuarioServ.getAllUsuarios();
@@ -33,7 +29,7 @@ public class UsuarioController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable Long id, @RequestBody Usuario usuarioDetails) {
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable Long id, @Valid @RequestBody Usuario usuarioDetails) {
         Usuario updatedUsuario = usuarioServ.updateUsuario(id, usuarioDetails);
         return updatedUsuario != null ? new ResponseEntity<>(updatedUsuario, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,4 +40,5 @@ public class UsuarioController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
+
 
