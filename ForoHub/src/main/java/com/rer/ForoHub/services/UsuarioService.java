@@ -28,7 +28,7 @@ public class UsuarioService {
             throw new UsuarioExistenteException("El usuario ya existe");
         }
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
-        usuario.setRol(Roles.ROLE_USUARIO);
+        usuario.setRol(Roles.USUARIO);
         try {
             usuarioRepo.save(usuario);
             logger.info("Usuario {} registrado correctamente", usuario.getNombre_usuario());

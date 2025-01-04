@@ -16,7 +16,8 @@ public class TopicoController {
 
     @Autowired
     private TopicoService topicoServ;
-    @PostMapping
+
+    @PostMapping("/crearTopico")
     public ResponseEntity<Topico> createTopico(@Valid @RequestBody Topico topico) {
         Topico createdTopico = topicoServ.createTopico(topico);
         return new ResponseEntity<>(createdTopico, HttpStatus.CREATED);

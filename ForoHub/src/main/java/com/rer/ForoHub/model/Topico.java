@@ -31,6 +31,14 @@ public class Topico {
     @OneToMany(mappedBy = "topico")
     private List<Respuestas> respuestas;
 
+    public Topico(String titulo, String mensaje, LocalDate fecha_creacion_topico, String status, Usuario autor) {
+        this.titulo = titulo;
+        this.mensaje = mensaje;
+        this.fecha_creacion_topico = fecha_creacion_topico;
+        this.status = status;
+        this.autor = autor;
+    }
+
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
     public String getTitulo() {return titulo;}

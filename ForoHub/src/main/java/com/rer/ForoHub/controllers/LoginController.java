@@ -3,6 +3,7 @@ package com.rer.ForoHub.controllers;
 import com.rer.ForoHub.model.LoginDTO;
 import com.rer.ForoHub.model.Usuario;
 import com.rer.ForoHub.model.UsuarioDTO;
+import com.rer.ForoHub.model.tokenDTO;
 import com.rer.ForoHub.security.JwtUtil;
 import com.rer.ForoHub.services.UsuarioService;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class LoginController {
                     new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtil.generarToken(username);
+            tokenDTO token=new tokenDTO(jwt);
             Map<String, String> response = new HashMap<>();
             response.put("token", jwt);
             response.put("username", username);

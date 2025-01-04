@@ -1,44 +1,44 @@
 package com.rer.ForoHub.controllers;
 
-import com.rer.ForoHub.model.Usuario;
-import com.rer.ForoHub.services.UsuarioService;
+import com.rer.ForoHub.model.Topico;
+import com.rer.ForoHub.model.TopicoDto;
+import com.rer.ForoHub.model.tokenDTO;
+import com.rer.ForoHub.security.JwtUtil;
+import com.rer.ForoHub.services.TopicoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioServ;
+    TopicoService topicoServ;
+    @Autowired
+    JwtUtil jwtUtil;
+    @Autowired
+    tokenDTO tokendto;
 
-    @GetMapping
-    public ResponseEntity<List<Usuario>> getAllUsuarios() {
-        List<Usuario> usuarios = usuarioServ.getAllUsuarios();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioServ.getUsuarioById(id);
-        return usuario.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-    @PutMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable Long id, @Valid @RequestBody Usuario usuarioDetails) {
-        Usuario updatedUsuario = usuarioServ.updateUsuario(id, usuarioDetails);
-        return updatedUsuario != null ? new ResponseEntity<>(updatedUsuario, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
-        usuarioServ.deleteUsuario(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PostMapping("/crearTopico")
+    @PreAuthorize("hasRole('USUARIO')")
+    public ResponseEntity<Topico> createTopico(@Valid @RequestBody TopicoDto topicoDto) {
+        if (jwtUtil.validarToken(tokendto.tokenDto())) {
+            Topico crearTopico=new Topico(topicoDto.tituloDto(),topicoDto.mensajeDto(),topicoDto.fechacreaciontopicoDto(),
+                                          topicoDto.statusDto(),topicoDto.autorDto());
+             Topico topico = topicoServ.createTopico(crearTopico);
+             return new ResponseEntity<>(topico, HttpStatus.CREATED);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
+/*
+GET /topics: Obtener la lista de todos los tópicos.
+GET /topics/{id}: Obtener un tópico específico.
+POST /topics/{topicId}/replies: Crear una nueva respuesta a un tópico. (Requiere autenticación).
+GET /topics/{topicId}/replies: Obtener la lista de respuestas de un tópico específico. */
 
 
