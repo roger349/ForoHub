@@ -38,6 +38,7 @@ public class UsuarioService {
             throw new RuntimeException("Error al registrar usuario", e);
         }
     }
+    public Usuario saveUsuario(Usuario usuario) {return usuarioRepo.save(usuario);}
     public List<Usuario> getAllUsuarios() {return usuarioRepo.findAll();}
     public Optional<Usuario> getUsuarioById(Long id) {return usuarioRepo.findById(id);}
     public Usuario updateUsuario(Long id, Usuario usuarioDetails) {return usuarioDetails;}

@@ -11,17 +11,12 @@ import java.util.Optional;
 public class RespuestasService {
 
     @Autowired
-    private RespuestasRepository respuestasRepo;
+    RespuestasRepository respuestasRepo;
 
-    public Respuestas createRespuesta(Respuestas respuesta) {
-        return respuestasRepo.save(respuesta);
-    }
-    public List<Respuestas> getAllRespuestas() {
-        return respuestasRepo.findAll();
-    }
-    public Optional<Respuestas> getRespuestaById(Long id) {
-        return respuestasRepo.findById(id);
-    }
+    public Respuestas guardarRespuesta(Respuestas respuesta) {return respuestasRepo.save(respuesta);}
+    public List<Respuestas> getAllRespuestas() {return respuestasRepo.findAll();}
+    public Optional<Respuestas> getRespuestaById(Long id) {return respuestasRepo.findById(id);}
+    public void deleteRespuesta(Long id) {respuestasRepo.deleteById(id);}
     public Respuestas updateRespuesta(Long id, Respuestas respuestaDetails) {
         Optional<Respuestas> existingRespuesta = respuestasRepo.findById(id);
         if (existingRespuesta.isPresent()) {
@@ -32,9 +27,6 @@ public class RespuestasService {
             return respuestasRepo.save(respuesta);
         }
         return null;
-    }
-    public void deleteRespuesta(Long id) {
-        respuestasRepo.deleteById(id);
     }
 }
 

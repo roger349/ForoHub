@@ -19,7 +19,7 @@ public class TopicoController {
 
     @PostMapping("/crearTopico")
     public ResponseEntity<Topico> createTopico(@Valid @RequestBody Topico topico) {
-        Topico createdTopico = topicoServ.createTopico(topico);
+        Topico createdTopico = topicoServ.guardarTopico(topico);
         return new ResponseEntity<>(createdTopico, HttpStatus.CREATED);
     }
     @GetMapping

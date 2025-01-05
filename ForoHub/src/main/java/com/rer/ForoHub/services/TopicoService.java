@@ -11,21 +11,12 @@ import java.util.Optional;
 public class TopicoService {
 
     @Autowired
-    private TopicoRepository topicoRepo;
+    TopicoRepository topicoRepo;
 
-    // Crear un nuevo tópico
-    public Topico createTopico(Topico topico) {
-        return topicoRepo.save(topico);
-    }
-    // Mostrar todos los tópicos
-    public List<Topico> getAllTopicos() {
-        return topicoRepo.findAll();
-    }
-    // Mostrar un tópico específico
-    public Optional<Topico> getTopicoById(Long id) {
-        return topicoRepo.findById(id);
-    }
-    // Actualizar un tópico
+    public Topico guardarTopico(Topico topico) {return topicoRepo.save(topico);}
+    public List<Topico> getAllTopicos() {return topicoRepo.findAll();}
+    public Optional<Topico> getTopicoById(Long id) {return topicoRepo.findById(id);}
+    public void deleteTopico(Long id) {topicoRepo.deleteById(id);}
     public Topico updateTopico(Long id, Topico topicoDetails) {
         Optional<Topico> existingTopico = topicoRepo.findById(id);
         if (existingTopico.isPresent()) {
@@ -37,10 +28,6 @@ public class TopicoService {
             return topicoRepo.save(topico);
         }
         return null;
-    }
-    // Eliminar un tópico
-    public void deleteTopico(Long id) {
-        topicoRepo.deleteById(id);
     }
 }
 

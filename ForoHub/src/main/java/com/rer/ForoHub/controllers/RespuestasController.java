@@ -18,7 +18,7 @@ public class RespuestasController {
 
     @PostMapping
     public ResponseEntity<Respuestas> createRespuesta(@RequestBody Respuestas respuesta) {
-        Respuestas createdRespuesta = respuestasServ.createRespuesta(respuesta);
+        Respuestas createdRespuesta = respuestasServ.guardarRespuesta(respuesta);
         return new ResponseEntity<>(createdRespuesta, HttpStatus.CREATED);
     }
     @GetMapping

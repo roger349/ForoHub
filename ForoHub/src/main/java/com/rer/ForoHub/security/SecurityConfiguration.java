@@ -31,7 +31,6 @@ public class SecurityConfiguration {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-    // AuthenticationManager configurado de forma simplificada
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
@@ -39,7 +38,6 @@ public class SecurityConfiguration {
                 .passwordEncoder(passwordEncoder()).and()
                 .build();
     }
-    // Configuración del PasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
