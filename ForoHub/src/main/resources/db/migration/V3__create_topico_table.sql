@@ -4,6 +4,7 @@ CREATE TABLE topico (
     mensaje TEXT NOT NULL,
     fecha_creacion_topico DATE NOT NULL,
     status VARCHAR(50) NOT NULL,
+    categoria VARCHAR(80) NOT NULL
     autor_id BIGINT,
     curso_id BIGINT,
     FOREIGN KEY (autor_id) REFERENCES usuario(id),

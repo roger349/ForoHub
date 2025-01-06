@@ -38,8 +38,8 @@ public class LoginController {
     @PostMapping("/registrarUsuario")
     public ResponseEntity<Usuario> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         try {
-            Usuario usuario = new Usuario(usuarioDTO.contraseñaDto(), usuarioDTO.correoElectronicoDto(),
-                    usuarioDTO.nombreUsuarioDto(), usuarioDTO.rolDto());
+            Usuario usuario = new Usuario(usuarioDTO.contraseñaDto(), usuarioDTO.nombreUsuarioDto()
+                                         ,usuarioDTO.correoElectronicoDto(), usuarioDTO.rolDto());
             Usuario user = usuarioServ.registrarUsuario(usuario);
             user.setContraseña(null);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);

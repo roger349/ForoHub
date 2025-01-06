@@ -23,7 +23,7 @@ public class RespuestasService {
             Respuestas respuesta = existingRespuesta.get();
             respuesta.setMensaje_respuestas(respuestaDetails.getMensaje_respuestas());
             respuesta.setFecha_creacion_respuestas(respuestaDetails.getFecha_creacion_respuestas());
-            respuesta.setSolucion(respuestaDetails.getSolucion());
+            respuesta.setEstado(respuestaDetails.getEstado());
             return respuestasRepo.save(respuesta);
         }
         return null;

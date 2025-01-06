@@ -17,8 +17,8 @@ public class Respuestas {
     private String mensaje_respuestas;
     @Column(name = "fecha_creacion_respuestas")
     private LocalDate fecha_creacion_respuestas;
-    @Column(name = "solucion")
-    private Boolean solucion;
+    @Column(name = "estado")
+    private Boolean estado;
     @ManyToOne
     @JoinColumn(name = "topico_id")
     private Topico topico;
@@ -29,8 +29,8 @@ public class Respuestas {
     public void setMensaje_respuestas(String mensaje_respuestas) {this.mensaje_respuestas = mensaje_respuestas;}
     public LocalDate getFecha_creacion_respuestas() {return fecha_creacion_respuestas;}
     public void setFecha_creacion_respuestas(LocalDate fecha_creacion_respuestas) {this.fecha_creacion_respuestas = fecha_creacion_respuestas;}
-    public Boolean getSolucion() {return solucion;}
-    public void setSolucion(Boolean solucion) {this.solucion = solucion;}
+    public Boolean getEstado() {return estado;}
+    public void setEstado(Boolean estado) {this.estado = estado;}
     public Topico getTopico() {return topico;}
     public void setTopico(Topico topico) {this.topico = topico;}
     @Override
@@ -38,7 +38,7 @@ public class Respuestas {
         return "Respuestas{" +
                 "mensaje_respuestas='" + mensaje_respuestas + '\'' +
                 ", fecha_creacion_respuestas=" + fecha_creacion_respuestas +
-                ", solucion=" + solucion +
+                ", solucion=" + estado +
                 ", topico=" + topico +
                 '}';
     }

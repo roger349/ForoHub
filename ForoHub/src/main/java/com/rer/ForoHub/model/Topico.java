@@ -22,6 +22,9 @@ public class Topico {
     private LocalDate fecha_creacion_topico;
     @Column(name = "status")
     private String status;
+    @Column(name="categoria")
+    @Enumerated(EnumType.STRING)
+    private Categorias categoria;
     @ManyToOne
     @JoinColumn(name = "autor_id")
     private Usuario autor;
@@ -31,11 +34,13 @@ public class Topico {
     @OneToMany(mappedBy = "topico")
     private List<Respuestas> respuestas;
 
-    public Topico(String titulo, String mensaje, LocalDate fecha_creacion_topico, String status, Usuario autor) {
+    public Topico(String titulo, String mensaje, LocalDate fecha_creacion_topico,
+                  String status,Categorias categoria ,Usuario autor) {
         this.titulo = titulo;
         this.mensaje = mensaje;
         this.fecha_creacion_topico = fecha_creacion_topico;
         this.status = status;
+        this.categoria=categoria;
         this.autor = autor;
     }
 
@@ -49,6 +54,8 @@ public class Topico {
     public void setFecha_creacion_topico(LocalDate fecha_creacion_topico) {this.fecha_creacion_topico = fecha_creacion_topico;}
     public String getStatus() {return status;}
     public void setStatus(String status) {this.status = status;}
+    public Categorias getCategoria() {return categoria;}
+    public void setCategoria(Categorias categoria) {this.categoria = categoria;}
     public Usuario getAutor() {return autor;}
     public void setAutor(Usuario autor) {this.autor = autor;}
     public Cursos getCurso() {return curso;}

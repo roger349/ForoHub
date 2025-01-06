@@ -23,20 +23,33 @@ public class UsuarioService {
     PasswordEncoder passwordEncoder;
 
     public Usuario registrarUsuario(Usuario usuario) {
-        if (usuarioRepo.findByNombre_usuario(usuario.getNombre_usuario()) != null) {
-            logger.error("Usuario {} ya existe", usuario.getNombre_usuario());
-            throw new UsuarioExistenteException("El usuario ya existe");
-        }
-        usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
-        usuario.setRol(Roles.USUARIO);
-        try {
-            usuarioRepo.save(usuario);
-            logger.info("Usuario {} registrado correctamente", usuario.getNombre_usuario());
-            return usuario;
-        } catch (DataAccessException e) {
-            logger.error("Error al registrar usuario: {}", e.getMessage());
-            throw new RuntimeException("Error al registrar usuario", e);
-        }
+
+          if(!usuarioRepo.exists(usuario.getRol())) {
+
+              if (usuarioRepo.findByNombre_usuario(usuario.getNombre_usuario()) != null) {
+                  logger.error("Usuario {} ya existe", usuario.getNombre_usuario());
+                  throw new UsuarioExistenteException("El usuario ya existe");
+              }
+              if ("ADMIN".equals(usuario.getRol().name())) {
+                  usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
+                  usuario.setRol(Roles.ADMIN);
+              } else {
+                  usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
+                  usuario.setRol(Roles.USUARIO);
+              }
+              try {
+                  usuarioRepo.save(usuario);
+                  logger.info("Usuario {} registrado correctamente", usuario.getNombre_usuario());
+                  return usuario;
+              } catch (DataAccessException e) {
+                  logger.error("Error al registrar usuario: {}", e.getMessage());
+                  throw new RuntimeException("Error al registrar usuario", e);
+              }
+          }
+          else {
+              logger.error("No se Puede registrar mas de un usuario {} ",usuario.getRol().name() );
+              throw new UsuarioExistenteException("El ADMIN ya existe");
+          }
     }
     public Usuario saveUsuario(Usuario usuario) {return usuarioRepo.save(usuario);}
     public List<Usuario> getAllUsuarios() {return usuarioRepo.findAll();}

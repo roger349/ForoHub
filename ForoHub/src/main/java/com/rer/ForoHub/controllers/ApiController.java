@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class ApiController {
     @Autowired
     UsuarioService usuarioServ;
@@ -25,8 +25,8 @@ public class ApiController {
     RespuestasService respuestaServ;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/usuarios")
-    public ResponseEntity<List<Usuario>> obtenerUsuarios() {
+    @GetMapping("/usuarios/listarUsuarios")
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
         try {
             List<Usuario> usuarios = usuarioServ.getAllUsuarios();
             return ResponseEntity.ok(usuarios);
@@ -35,7 +35,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/usuarios/{id}")
+    @GetMapping("/usuarios/obtenerUsuarioId/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
         try {
             Optional<Usuario> usuario = usuarioServ.getUsuarioById(id);
@@ -47,7 +47,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/usuarios/{id}")
+    @PutMapping("/usuarios/actualizarUsuarioId/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
         try {
             Optional<Usuario> usuarioExistente = usuarioServ.getUsuarioById(id);
@@ -64,7 +64,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/usuarios/{id}")
+    @DeleteMapping("/usuarios/eliminarUsuarioId/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         try {
             Optional<Usuario> usuarioExistente = usuarioServ.getUsuarioById(id);
@@ -79,8 +79,8 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    @GetMapping("/topicos")
-    public ResponseEntity<List<Topico>> obtenerTopicos() {
+    @GetMapping("/topicos/listarTopicos")
+    public ResponseEntity<List<Topico>> listarTopicos() {
         try {
             List<Topico> topicos = topicoServ.getAllTopicos();
             return ResponseEntity.ok(topicos);
@@ -89,7 +89,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    @PostMapping("/topicos")
+    @PostMapping("/topicos/crearTopico")
     public ResponseEntity<Topico> crearTopico(@RequestBody Topico topico) {
         try {
             Topico nuevoTopico = topicoServ.guardarTopico(topico);
@@ -100,7 +100,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    @PutMapping("/topicos/{id}")
+    @PutMapping("/topicos/actualizarTopicoId/{id}")
     public ResponseEntity<Topico> actualizarTopico(@PathVariable Long id, @RequestBody Topico topico) {
         try {
             Optional<Topico> usuarioExistente = topicoServ.getTopicoById(id);
@@ -117,7 +117,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/topicos/{id}")
+    @DeleteMapping("/topicos/eliminarTopicoId/{id}")
     public ResponseEntity<Void> eliminarTopico(@PathVariable Long id) {
         try {
             Optional<Topico> topicoExistente = topicoServ.getTopicoById(id);
@@ -132,8 +132,8 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    @GetMapping("/respuestas")
-    public ResponseEntity<List<Respuestas>> obtenerRespuestas() {
+    @GetMapping("/respuestas/listarRespuestas")
+    public ResponseEntity<List<Respuestas>> listarRespuestas() {
         try {
             List<Respuestas> respuestas = respuestaServ.getAllRespuestas();
             return ResponseEntity.ok(respuestas);
@@ -142,7 +142,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    @PostMapping("/respuestas")
+    @PostMapping("/respuestas/crearRespuesta")
     public ResponseEntity<Respuestas> crearRespuesta(@RequestBody Respuestas respuesta) {
         try {
             Respuestas nuevaRespuesta = respuestaServ.guardarRespuesta(respuesta);
@@ -153,7 +153,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    @PutMapping("/respuestas/{id}")
+    @PutMapping("/respuestas/actualizarRespuestaId/{id}")
     public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable Long id, @RequestBody Respuestas respuesta) {
         try {
             Optional<Respuestas> respuestaExistente = respuestaServ.getRespuestaById(id);
@@ -170,7 +170,7 @@ public class ApiController {
         }
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/respuestas/{id}")
+    @DeleteMapping("/respuestas/eliminarRespuestaId/{id}")
     public ResponseEntity<Void> eliminarRespuesta(@PathVariable Long id) {
         try {
             Optional<Respuestas> respuestaExistente = respuestaServ.getRespuestaById(id);
