@@ -52,25 +52,28 @@ public class ApiController {
         try {
             Optional<Usuario> usuarioExistente = usuarioServ.getUsuarioById(id);
             if (usuarioExistente.isPresent()) {
-                usuario.setId(id);
-                Usuario usuarioActualizado = usuarioServ.saveUsuario(usuario);
+                Usuario usuarioActual = usuarioExistente.get();
+                if (usuario.getContraseña() != null) {usuarioActual.setContraseña(usuario.getContraseña());}
+                if (usuario.getNombre_usuario() != null) {usuarioActual.setNombre_usuario(usuario.getNombre_usuario());}
+                if (usuario.getCorreo_Electronico() != null) {usuarioActual.setCorreo_Electronico(usuario.getCorreo_Electronico());}
+                if (usuario.getRol() != null) {usuarioActual.setRol(usuario.getRol());}
+                Usuario usuarioActualizado = usuarioServ.saveUsuario(usuarioActual);
                 return ResponseEntity.ok(usuarioActualizado);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/usuarios/eliminarUsuarioId/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
+    public ResponseEntity<String> eliminarUsuario(@PathVariable Long id) {
         try {
             Optional<Usuario> usuarioExistente = usuarioServ.getUsuarioById(id);
             if (usuarioExistente.isPresent()) {
                 usuarioServ.deleteUsuario(id);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+                return ResponseEntity.ok("Usuario Eliminado");    //status(HttpStatus.NO_CONTENT).build();
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }

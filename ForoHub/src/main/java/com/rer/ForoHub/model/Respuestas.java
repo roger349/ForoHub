@@ -38,7 +38,7 @@ public class Respuestas {
         return "Respuestas{" +
                 "mensaje_respuestas='" + mensaje_respuestas + '\'' +
                 ", fecha_creacion_respuestas=" + fecha_creacion_respuestas +
-                ", solucion=" + estado +
+                ", estado=" + estado +
                 ", topico=" + topico +
                 '}';
     }

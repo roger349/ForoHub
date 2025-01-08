@@ -1,5 +1,5 @@
 package com.rer.ForoHub.model;
 
-public record UsuarioDTO(String contraseñaDto, String correoElectronicoDto,
-                         String nombreUsuarioDto, Roles rolDto) {
+public record UsuarioDTO(Long idDTO, String contraseñaDto,String nombreUsuarioDto ,
+                         String correoElectronicoDto, Roles rolDto) {
 }

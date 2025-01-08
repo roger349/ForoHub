@@ -1,9 +1,9 @@
 package com.rer.ForoHub.controllers;
 
-import com.rer.ForoHub.model.LoginDTO;
-import com.rer.ForoHub.model.Usuario;
-import com.rer.ForoHub.model.UsuarioDTO;
-import com.rer.ForoHub.model.tokenDTO;
+import com.rer.ForoHub.errores.AdminAlreadyExistsException;
+import com.rer.ForoHub.errores.ErrorResponse;
+import com.rer.ForoHub.model.*;
+import com.rer.ForoHub.repository.UsuarioRepository;
 import com.rer.ForoHub.security.JwtUtil;
 import com.rer.ForoHub.services.UsuarioService;
 import org.slf4j.Logger;
@@ -27,6 +27,8 @@ import java.util.Map;
 @RequestMapping("/")
 public class LoginController {
     @Autowired
+    UsuarioRepository usuarioRepo;
+    @Autowired
     UsuarioService usuarioServ;
     @Autowired
     JwtUtil jwtUtil;
@@ -36,14 +38,28 @@ public class LoginController {
     final static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @PostMapping("/registrarUsuario")
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Usuario> registrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         try {
-            Usuario usuario = new Usuario(usuarioDTO.contraseñaDto(), usuarioDTO.nombreUsuarioDto()
-                                         ,usuarioDTO.correoElectronicoDto(), usuarioDTO.rolDto());
-            Usuario user = usuarioServ.registrarUsuario(usuario);
-            user.setContraseña(null);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-        } catch (Exception e) {
+
+            boolean existeAdmin = usuarioServ.existeAdministrador();
+            String rol= usuarioDTO.rolDto().name().toUpperCase();
+            if (existeAdmin && "ADMIN".equals(rol)) {
+
+                throw new AdminAlreadyExistsException("El usuario con rol ADMIN ya existe.");
+
+            } else {
+                Usuario usuario = new Usuario(usuarioDTO.contraseñaDto(), usuarioDTO.correoElectronicoDto(),
+                        usuarioDTO.nombreUsuarioDto(), usuarioDTO.rolDto());
+                Usuario user = usuarioServ.crearUsuario(usuario);
+                user.setContraseña(null);
+                return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            }
+        }
+        catch (AdminAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        }
+        catch (Exception e) {
+            logger.error("Error del servidor", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

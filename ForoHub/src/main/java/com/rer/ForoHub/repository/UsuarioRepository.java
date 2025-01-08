@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+
     @Query("select u from Usuario u where u.nombre_usuario = :nombre_usuario")
     Usuario findByNombre_usuario(String nombre_usuario);
-    boolean exists(Roles rol);
+    @Query("select count(u) from Usuario u where u.rol = :roles")
+    long countByRol(Roles roles);
 }
 
