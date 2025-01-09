@@ -1,8 +1,6 @@
 package com.rer.ForoHub.controllers;
 
-import com.rer.ForoHub.model.Respuestas;
-import com.rer.ForoHub.model.Topico;
-import com.rer.ForoHub.model.Usuario;
+import com.rer.ForoHub.model.*;
 import com.rer.ForoHub.services.RespuestasService;
 import com.rer.ForoHub.services.TopicoService;
 import com.rer.ForoHub.services.UsuarioService;
@@ -11,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,9 +93,16 @@ public class ApiController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     @PostMapping("/topicos/crearTopico")
-    public ResponseEntity<Topico> crearTopico(@RequestBody Topico topico) {
+    public ResponseEntity<Topico> crearTopico(@RequestBody TopicoDto topicoDto) {
         try {
-            Topico nuevoTopico = topicoServ.guardarTopico(topico);
+            String titulo=topicoDto.titulo();
+            String mensaje=topicoDto.mensaje();
+            LocalDate fechaCreacionTopico = topicoDto.fecha_creacion_topico();
+            Status status = topicoDto.status();
+            Categorias categoria = topicoDto.categoria();
+            Usuario id = topicoDto.autor();
+            Topico topico = new Topico(titulo,mensaje,fechaCreacionTopico,categoria,id);
+            Topico nuevoTopico=topicoServ.guardarTopico(topico);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoTopico);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
