@@ -1,5 +1,6 @@
 package com.rer.ForoHub.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @Column(name = "contraseña")
     private String contraseña;
     @Column(name = "nombre_usuario")
@@ -21,10 +22,10 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Roles rol;
     @OneToMany(mappedBy = "autor")
+    @JsonBackReference
     private List<Topico> topicos;
 
-    public Usuario() {
-    }
+    public Usuario() { }
 
     public Usuario(String contraseña, String nombre_usuario, String correo_Electronico, Roles rol) {
         this.contraseña = contraseña;
@@ -33,8 +34,8 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
+    public long getId() {return id;}
+    public void setId(long id) {this.id = id;}
     public String getContraseña() {return contraseña;}
     public void setContraseña(String contraseña) {this.contraseña = contraseña;}
     public String getNombre_usuario() {return nombre_usuario;}

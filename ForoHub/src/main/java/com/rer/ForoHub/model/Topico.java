@@ -1,5 +1,8 @@
 package com.rer.ForoHub.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 
@@ -12,7 +15,7 @@ import java.util.List;
 public class Topico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @Column(name = "titulo")
     private String titulo;
     @Column(name = "mensaje")
@@ -27,15 +30,16 @@ public class Topico {
     private Categorias categoria;
     @ManyToOne
     @JoinColumn(name = "autor_id")
+    @JsonManagedReference
     private Usuario autor;
     @OneToMany(mappedBy = "topico")
     private List<Respuestas> respuestas;
 
-    public Topico(String titulo, String mensaje, LocalDate fechaCreacionTopico, Categorias categoria, Usuario autor){
+    public Topico(){
     }
 
     public Topico(String titulo, String mensaje, LocalDate fecha_creacion_topico,
-                  Status status,Categorias categoria ,Usuario autor) {
+                  Status status, Categorias categoria , Usuario autor) {
         this.titulo = titulo;
         this.mensaje = mensaje;
         this.fecha_creacion_topico = fecha_creacion_topico;
@@ -44,8 +48,8 @@ public class Topico {
         this.autor = autor;
     }
 
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
+    public long getId() {return id;}
+    public void setId(long id) {this.id = id;}
     public String getTitulo() {return titulo;}
     public void setTitulo(String titulo) {this.titulo = titulo;}
     public String getMensaje() {return mensaje;}

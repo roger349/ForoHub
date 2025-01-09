@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -48,9 +47,9 @@ public class UsuarioService {
     }
     public Usuario saveUsuario(Usuario usuario) {return usuarioRepo.save(usuario);}
     public List<Usuario> getAllUsuarios() {return usuarioRepo.findAll();}
-    public Optional<Usuario> getUsuarioById(Long id) {return usuarioRepo.findById(id);}
-    public Usuario updateUsuario(Long id, Usuario usuarioDetails) {return usuarioDetails;}
-    public void deleteUsuario(Long id) {
+    public Optional<Usuario> getUsuarioById(java.lang.Long id) {return usuarioRepo.findById(id);}
+    public Usuario updateUsuario(java.lang.Long id, Usuario usuarioDetails) {return usuarioDetails;}
+    public void deleteUsuario(java.lang.Long id) {
         try {
             usuarioRepo.deleteById(id);
             logger.info("Usuario con ID {} eliminado correctamente", id);

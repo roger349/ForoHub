@@ -3,6 +3,7 @@ package com.rer.ForoHub.controllers;
 import com.rer.ForoHub.errores.AdminAlreadyExistsException;
 import com.rer.ForoHub.errores.ErrorResponse;
 import com.rer.ForoHub.model.*;
+import com.rer.ForoHub.model.Usuario;
 import com.rer.ForoHub.repository.UsuarioRepository;
 import com.rer.ForoHub.security.JwtUtil;
 import com.rer.ForoHub.services.UsuarioService;
