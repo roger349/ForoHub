@@ -100,10 +100,12 @@ public class ApiController {
             LocalDate fechaCreacionTopico = topicoDto.fecha_creacion_topico();
             Status status = topicoDto.status();
             Categorias categoria = topicoDto.categoria();
-            Usuario id = topicoDto.autor();
-            Topico topico = new Topico(titulo,mensaje,fechaCreacionTopico,categoria,id);
-            Topico nuevoTopico=topicoServ.guardarTopico(topico);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoTopico);
+            UsuarioDTO user = new UsuarioDTO(topicoDto.autor().getId(),topicoDto.autor().getContraseña(),
+                                                topicoDto.autor().getNombre_usuario(),topicoDto.autor().getCorreo_Electronico(),
+                                                topicoDto.autor().getRol());
+            Topico topico = new Topico(titulo,mensaje,fechaCreacionTopico,categoria,user);
+            topicoServ.guardarTopico(topico);
+            return ResponseEntity.status(HttpStatus.CREATED).body(topico);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);

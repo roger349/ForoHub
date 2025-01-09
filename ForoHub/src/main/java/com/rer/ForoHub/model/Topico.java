@@ -31,7 +31,7 @@ public class Topico {
     @OneToMany(mappedBy = "topico")
     private List<Respuestas> respuestas;
 
-    public Topico(String titulo, String mensaje, LocalDate fechaCreacionTopico, Categorias categoria, Usuario id){
+    public Topico(String titulo, String mensaje, LocalDate fechaCreacionTopico, Categorias categoria, Usuario autor){
     }
 
     public Topico(String titulo, String mensaje, LocalDate fecha_creacion_topico,
