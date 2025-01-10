@@ -33,6 +33,7 @@ public class Topico {
     @JsonManagedReference
     private Usuario autor;
     @OneToMany(mappedBy = "topico")
+    @JsonBackReference
     private List<Respuestas> respuestas;
 
     public Topico(){

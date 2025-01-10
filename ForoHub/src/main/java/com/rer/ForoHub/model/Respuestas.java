@@ -1,7 +1,5 @@
 package com.rer.ForoHub.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,9 +20,17 @@ public class Respuestas {
     private Boolean estado;
     @ManyToOne
     @JoinColumn(name = "topico_id")
+    @JsonManagedReference
     private Topico topico;
 
     public Respuestas(){ }
+
+    public Respuestas(String mensaje_respuestas, LocalDate fecha_creacion_respuestas, Boolean estado, Topico topico) {
+        this.mensaje_respuestas = mensaje_respuestas;
+        this.fecha_creacion_respuestas = fecha_creacion_respuestas;
+        this.estado = estado;
+        this.topico = topico;
+    }
 
     public long getId() {return id;}
     public void setId(long id) {this.id = id;}

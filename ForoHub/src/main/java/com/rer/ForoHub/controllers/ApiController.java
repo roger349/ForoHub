@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +39,8 @@ public class ApiController {
         try {
             List<Usuario> usuarios = usuarioServ.getAllUsuarios();
             return ResponseEntity.ok(usuarios);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -51,7 +51,8 @@ public class ApiController {
             Optional<Usuario> usuario = usuarioServ.getUsuarioById(id);
             return usuario.map(ResponseEntity::ok).orElseGet(() ->
                     ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
@@ -69,10 +70,12 @@ public class ApiController {
                 if (usuario.getRol() != null) {usuarioActual.setRol(usuario.getRol());}
                 Usuario usuarioActualizado = usuarioServ.saveUsuario(usuarioActual);
                 return ResponseEntity.ok(usuarioActualizado);
-            } else {
+            }
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -84,10 +87,12 @@ public class ApiController {
             if (usuarioExistente.isPresent()) {
                 usuarioServ.deleteUsuario(id);
                 return ResponseEntity.ok("Usuario Eliminado");
-            } else {
+            }
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -97,7 +102,8 @@ public class ApiController {
         try {
             List<Topico> topicos = topicoServ.getAllTopicos();
             return ResponseEntity.ok(topicos);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -118,7 +124,8 @@ public class ApiController {
             nuevoTopico.setAutor(user);
             topicoServ.guardarTopico(nuevoTopico);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoTopico);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
@@ -136,10 +143,12 @@ public class ApiController {
                 if (topicoDto.categoria() != null) {topicoActual.setCategoria(topicoDto.categoria());}
                 Topico topicoActualizado = topicoServ.guardarTopico(topicoActual);
                 return ResponseEntity.ok(topicoActualizado);
-            } else {
+            }
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -151,10 +160,12 @@ public class ApiController {
             if (topicoExistente.isPresent()) {
                 topicoServ.deleteTopico(id);
                 return ResponseEntity.ok("Topico Eliminado");
-            } else {
+            }
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -164,61 +175,68 @@ public class ApiController {
         try {
             List<Respuestas> respuestas = respuestaServ.getAllRespuestas();
             return ResponseEntity.ok(respuestas);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    @PostMapping("/respuestas/crearRespuesta")
-    public ResponseEntity<Respuestas> crearRespuesta(@RequestBody RespuestasDto respuestaDto) {
+    @PostMapping("/respuestas/crearRespuesta/{id}")
+    public ResponseEntity<Respuestas> crearRespuesta(@PathVariable long id, @RequestBody RespuestasDto respuestaDto) {
         try {
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            Authentication authentication = securityContext.getAuthentication();
-            String username = authentication.getName();
-            Usuario user = usuarioRepo.findByNombre_usuario(username);
-            Topico nuevoTopico=new Topico();
-            nuevoTopico.setTitulo(topicoDto.titulo());
-            nuevoTopico.setMensaje(topicoDto.mensaje());
-            nuevoTopico.setFecha_creacion_topico(topicoDto.fecha_creacion_topico());
-            nuevoTopico.setStatus(Status.noResuelto);
-            nuevoTopico.setCategoria(topicoDto.categoria());
-            nuevoTopico.setAutor(user);
-            topicoServ.guardarTopico(nuevoTopico);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoTopico);
-        } catch (Exception e) {
+            Topico topico = topicoRepo.findById(id);
+            topico.setStatus(Status.Resuelto);
+            Respuestas nuevaRespuesta=new Respuestas();
+            nuevaRespuesta.setMensaje_respuestas(respuestaDto.mensajeRespuesta());
+            nuevaRespuesta.setFecha_creacion_respuestas(respuestaDto.fechacreacionrespuesta());
+            nuevaRespuesta.setEstado(respuestaDto.estadoRespuesta());
+            nuevaRespuesta.setTopico(topico);
+            respuestaServ.guardarRespuesta(nuevaRespuesta);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaRespuesta);
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     @PutMapping("/respuestas/actualizarRespuestaId/{id}")
-    public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable long id, @RequestBody Respuestas respuesta) {
+    public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable long id, @RequestBody RespuestasDto respuestaDto) {
         try {
             Optional<Respuestas> respuestaExistente = respuestaServ.getRespuestaById(id);
             if (respuestaExistente.isPresent()) {
-                respuesta.setId(id);
-                Respuestas respuestaActualizada = respuestaServ.guardarRespuesta(respuesta);
+                Respuestas respuestaActual = respuestaExistente.get();
+                if (respuestaDto.mensajeRespuesta() != null) {
+                       respuestaActual.setMensaje_respuestas(respuestaDto.mensajeRespuesta());}
+                if (respuestaDto.fechacreacionrespuesta() != null) {
+                       respuestaActual.setFecha_creacion_respuestas(respuestaDto.fechacreacionrespuesta());}
+                if (respuestaDto.estadoRespuesta() != null) {
+                       respuestaActual.setEstado(respuestaDto.estadoRespuesta());}
+                Respuestas respuestaActualizada = respuestaServ.guardarRespuesta(respuestaActual);
                 return ResponseEntity.ok(respuestaActualizada);
-            } else {
+            }
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/respuestas/eliminarRespuestaId/{id}")
-    public ResponseEntity<Void> eliminarRespuesta(@PathVariable long id) {
+    public ResponseEntity<String> eliminarRespuesta(@PathVariable long id) {
         try {
             Optional<Respuestas> respuestaExistente = respuestaServ.getRespuestaById(id);
             if (respuestaExistente.isPresent()) {
                 respuestaServ.deleteRespuesta(id);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            } else {
+                return ResponseEntity.ok("Respuesta Eliminada");
+            }
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
