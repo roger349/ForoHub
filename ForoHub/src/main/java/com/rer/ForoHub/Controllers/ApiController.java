@@ -116,7 +116,7 @@ public class ApiController {
         }
     }
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @GetMapping("/topicos/listarTopicos")
     public ResponseEntity<Page<Topico>> listarTopicos(@PageableDefault(page=0, size=10,sort="fecha_creacion_topico,asc")
                                                       Pageable pageable) {
@@ -132,7 +132,7 @@ public class ApiController {
         }
     }
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @ResponseBody
     @GetMapping("/topicos/listarTopicoPorIdRespuestas/{id}")
     public ResponseEntity<TopicoRespuestas> listarTopicoPorIdRespuestas(@PathVariable Long id,
@@ -152,7 +152,7 @@ public class ApiController {
          }
     }
     @Transactional
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PostMapping("/topicos/crearTopico")
     public ResponseEntity<Topico> crearTopico(@Valid @RequestBody TopicoDto topicoDto) {
         try {
@@ -175,7 +175,7 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PutMapping("/topicos/actualizarTopicoId/{id}")
     public ResponseEntity<Topico> actualizarTopico(@PathVariable long id, @RequestBody TopicoDto topicoDto) {
         try {
@@ -216,14 +216,14 @@ public class ApiController {
         }
     }
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @GetMapping("/respuestas/listarRespuestas")
     public ResponseEntity<List<Respuestas>> listarRespuestas() {
         List<Respuestas> respuestas = respuestaServ.getAllRespuestas();
         return ResponseEntity.ok(respuestas);
     }
     @Transactional
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PostMapping("/respuestas/crearRespuesta/{id}")
     public ResponseEntity<Respuestas> crearRespuesta(@PathVariable long id, @Valid @RequestBody RespuestasDto respuestaDto) {
         try {
@@ -242,7 +242,7 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PutMapping("/respuestas/actualizarRespuestaId/{id}")
     public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable long id, @RequestBody RespuestasDto respuestaDto) {
         try {

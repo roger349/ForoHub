@@ -7,6 +7,7 @@ import com.rer.ForoHub.Models.Dto.UsuarioDTO;
 import com.rer.ForoHub.Models.Dto.tokenDTO;
 import com.rer.ForoHub.Models.Model.Usuario;
 import com.rer.ForoHub.Repository.UsuarioRepository;
+import com.rer.ForoHub.Security.Authenticar;
 import com.rer.ForoHub.Security.JwtUtil;
 import com.rer.ForoHub.Services.UsuarioService;
 import org.slf4j.Logger;
@@ -27,6 +28,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/")
 public class LoginController {
+    @Autowired
+    Authenticar authenticar;
     @Autowired
     UsuarioRepository usuarioRepo;
     @Autowired
@@ -69,20 +72,20 @@ public class LoginController {
         try {
             String username = loginDTO.username();
             String password = loginDTO.password();
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwt = jwtUtil.generarToken(username);
+            //Authentication authentication = authenticationManager.authenticate(
+            //new UsernamePasswordAuthenticationToken(username, password));*/
+            // SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = authenticar.loginValidacion(username,password);
             tokenDTO token=new tokenDTO(jwt);
             Map<String, String> response = new HashMap<>();
             response.put("token", jwt);
             response.put("username", username);
             return ResponseEntity.ok(response);
-        } catch (BadCredentialsException e) {
+        } /*catch (BadCredentialsException e) {
             logger.error("Credenciales inválidas para el usuario: {}", loginDTO.username(), e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Credenciales inválidas"));
-        } catch (Exception e) {
+                    .body(Map.of("error", "Credenciales inválidas"));  } */
+        catch (Exception e) {
             logger.error("Error del servidor durante la autenticación", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Error del servidor"));
