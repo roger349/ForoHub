@@ -49,7 +49,7 @@ public class ApiController {
     RespuestasRepository respuestasRepo;
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('LEER_USUARIO')")
     @GetMapping("/usuarios/listarUsuarios")
     public ResponseEntity<List<Usuario>> listarUsuarios() {
         try {
@@ -61,7 +61,7 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('LEER_USUARIO')")
     @GetMapping("/usuarios/obtenerUsuarioId/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable long id) {
         try {
@@ -75,7 +75,7 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ACTUALIZAR_USUARIO')")
     @PutMapping("/usuarios/actualizarUsuarioId/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable long id,@RequestBody Usuario usuario) {
         try {
@@ -98,7 +98,7 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ELIMINAR_USUARIO')")
     @DeleteMapping("/usuarios/eliminarUsuarioId/{id}")
     public ResponseEntity<String> eliminarUsuario(@PathVariable long id) {
         try {
@@ -116,7 +116,6 @@ public class ApiController {
         }
     }
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @GetMapping("/topicos/listarTopicos")
     public ResponseEntity<Page<Topico>> listarTopicos(@PageableDefault(page=0, size=10,sort="fecha_creacion_topico,asc")
                                                       Pageable pageable) {
@@ -132,7 +131,6 @@ public class ApiController {
         }
     }
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @ResponseBody
     @GetMapping("/topicos/listarTopicoPorIdRespuestas/{id}")
     public ResponseEntity<TopicoRespuestas> listarTopicoPorIdRespuestas(@PathVariable Long id,
@@ -152,7 +150,6 @@ public class ApiController {
          }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PostMapping("/topicos/crearTopico")
     public ResponseEntity<Topico> crearTopico(@Valid @RequestBody TopicoDto topicoDto) {
         try {
@@ -175,7 +172,6 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PutMapping("/topicos/actualizarTopicoId/{id}")
     public ResponseEntity<Topico> actualizarTopico(@PathVariable long id, @RequestBody TopicoDto topicoDto) {
         try {
@@ -198,7 +194,7 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ELIMINAR_TOPICO')")
     @DeleteMapping("/topicos/eliminarTopicoId/{id}")
     public ResponseEntity<String> eliminarTopico(@PathVariable long id) {
         try {
@@ -216,14 +212,12 @@ public class ApiController {
         }
     }
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @GetMapping("/respuestas/listarRespuestas")
     public ResponseEntity<List<Respuestas>> listarRespuestas() {
         List<Respuestas> respuestas = respuestaServ.getAllRespuestas();
         return ResponseEntity.ok(respuestas);
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PostMapping("/respuestas/crearRespuesta/{id}")
     public ResponseEntity<Respuestas> crearRespuesta(@PathVariable long id, @Valid @RequestBody RespuestasDto respuestaDto) {
         try {
@@ -242,7 +236,6 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     @PutMapping("/respuestas/actualizarRespuestaId/{id}")
     public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable long id, @RequestBody RespuestasDto respuestaDto) {
         try {
@@ -267,7 +260,7 @@ public class ApiController {
         }
     }
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ELIMINAR_RESPUESTAS')")
     @DeleteMapping("/respuestas/eliminarRespuestaId/{id}")
     public ResponseEntity<String> eliminarRespuesta(@PathVariable long id) {
         try {

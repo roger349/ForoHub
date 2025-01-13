@@ -5,8 +5,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
 import java.util.function.Function;
 
@@ -46,14 +47,14 @@ public class JwtUtil {
             return Collections.emptyList();
         }
     }
-    public List<String> extraerPermisos(String token) {
+   /* public List<String> extraerPermisos(String token) {
         try {
             Claims claims = extraerAllClaims(token);
             return claims.get("permisos", List.class);
         } catch (ExpiredJwtException e) {
             return Collections.emptyList();
         }
-    }
+    } */
     public <T> T extraerClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extraerAllClaims(token);
         return claimsResolver.apply(claims);
