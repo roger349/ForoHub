@@ -1,7 +1,5 @@
 package com.rer.ForoHub.Security;
 
-import com.rer.ForoHub.Models.Enum.Permisos;
-import com.rer.ForoHub.Models.Enum.Roles;
 import com.rer.ForoHub.Services.UserDetailsServiceUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,7 +26,8 @@ public class Authenticar {
 
             String token = jwtUtil.generarToken(userDetails.getUsername(), roles);
             return token;
-        } else {
+        }
+        else {
             throw new BadCredentialsException("Credenciales inválidas");
         }
     }

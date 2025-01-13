@@ -20,9 +20,9 @@ import java.util.List;
 public class UserDetailsServiceUsuario implements UserDetailsService {
 
     @Autowired
-    private UsuarioRepository usuarioRepo;
+    UsuarioRepository usuarioRepo;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -41,24 +41,7 @@ public class UserDetailsServiceUsuario implements UserDetailsService {
         return new User(usuario.getNombre_usuario(), encodedPassword, authorities);
     }
 }
-/*@Service
-public class UserDetailsServiceUsuario implements UserDetailsService {
 
-    @Autowired
-    UsuarioRepository usuarioRepo;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepo.findByNombre_usuario(username);
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado");
-        }
-        User.UserBuilder builder = User.withUsername(username);
-        builder.password(usuario.getContraseña());
-        builder.roles(usuario.getRol().name());
-        return builder.build();
-    }
-}*/
 
 
 

@@ -22,6 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
@@ -41,7 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     LOGGER.info("Autenticación exitosa para el usuario {}", username);
                 }
-                else {
+                else
+                {
                     LOGGER.warn("Token no válido");
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token no válido");
                     return;
