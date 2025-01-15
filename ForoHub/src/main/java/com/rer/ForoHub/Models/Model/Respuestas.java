@@ -1,5 +1,7 @@
 package com.rer.ForoHub.Models.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -24,6 +26,7 @@ public class Respuestas {
     @NotNull(message = "El estado no puede ser nulo, tiene que ser true o false")
     @Column(name = "estado")
     private Boolean estado;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "topico_id")
     @JsonManagedReference

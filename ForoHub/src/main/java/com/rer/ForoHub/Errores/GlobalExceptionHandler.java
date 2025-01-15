@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID debe ser mayor que 0");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Datos mal ingresados, verifique el formatod de los datos ingresados ");
     }
 }

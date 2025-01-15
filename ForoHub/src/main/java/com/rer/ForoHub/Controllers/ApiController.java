@@ -125,33 +125,12 @@ public class ApiController {
             try {
                 Sort sort = JpaSort.unsafe("fecha_creacion_topico").ascending();
                 Pageable pageableConSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-                Page<Topico> topicos = topicoRepo.findAllTopicoWithRespuestas(pageableConSort);
-                //List<Topico> topicos = topicoServ.getAllTopicos();
+                Page<Topico> topicos = topicoServ.getAllTopicos(pageableConSort);
             return ResponseEntity.ok(topicos);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('LEER_TOPICO')")
-    @ResponseBody
-    @GetMapping("/topicos/listarTopicoPorIdRespuestas/{id}")
-    public ResponseEntity<TopicoRespuestas> listarTopicoPorIdRespuestas(@PathVariable @Min(1) Long id,
-                                             @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
-         try {
-             Optional<Topico> topicoOpt = topicoRepo.findById(id);
-             if (topicoOpt.isEmpty()) {
-                 return ResponseEntity.notFound().build();
-             } else {
-                 Page<Respuestas> respuestasPage = respuestasRepo.findByTopicoId(id, pageable);
-                 TopicoRespuestas topicoRespuestas = new TopicoRespuestas(respuestasPage);
-                 return ResponseEntity.ok(topicoRespuestas);
-             }
-         }
-         catch (Exception e) {
-             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-         }
     }
     @Transactional
     @PreAuthorize("hasAuthority('CREAR_TOPICO')")
@@ -284,6 +263,26 @@ public class ApiController {
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('LEER_TOPICO')")
+    @ResponseBody
+    @GetMapping("/topicos/listarRespuestasPorIdTopico/{id}")
+    public ResponseEntity<TopicoRespuestas> listarTopicoPorIdRespuestas(@PathVariable @Min(1) Long id,
+                                            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+        try {
+            Optional<Topico> topicoOpt = topicoRepo.findById(id);
+            if (topicoOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            } else {
+                Page<Respuestas> respuestasPage = respuestasRepo.findByTopicoId(id, pageable);
+                TopicoRespuestas topicoRespuestas = new TopicoRespuestas(respuestasPage);
+                return ResponseEntity.ok(topicoRespuestas);
+            }
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

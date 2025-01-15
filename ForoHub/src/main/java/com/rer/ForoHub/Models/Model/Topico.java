@@ -2,6 +2,7 @@ package com.rer.ForoHub.Models.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rer.ForoHub.Models.Enum.Categorias;
 import com.rer.ForoHub.Models.Enum.Status;
@@ -36,6 +37,7 @@ public class Topico {
     @Column(name="categoria")
     @Enumerated(EnumType.STRING)
     private Categorias categoria;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "autor_id")
     @JsonManagedReference
