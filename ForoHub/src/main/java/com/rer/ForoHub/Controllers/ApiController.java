@@ -14,6 +14,7 @@ import com.rer.ForoHub.Services.RespuestasService;
 import com.rer.ForoHub.Services.TopicoService;
 import com.rer.ForoHub.Services.UsuarioService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +36,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/")
 public class ApiController {
+
     @Autowired
     UsuarioService usuarioServ;
     @Autowired
@@ -63,7 +65,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('LEER_USUARIO')")
     @GetMapping("/usuarios/obtenerUsuarioId/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable long id) {
+    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable @Min(1) long id) {
         try {
             Optional<Usuario> usuario = usuarioServ.getUsuarioById(id);
             return usuario.map(ResponseEntity::ok).orElseGet(() ->
@@ -77,7 +79,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ACTUALIZAR_USUARIO')")
     @PutMapping("/usuarios/actualizarUsuarioId/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable long id,@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable @Min(1) long id,@Valid @RequestBody Usuario usuario) {
         try {
             Optional<Usuario> usuarioExistente = usuarioServ.getUsuarioById(id);
             if (usuarioExistente.isPresent()) {
@@ -100,7 +102,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ELIMINAR_USUARIO')")
     @DeleteMapping("/usuarios/eliminarUsuarioId/{id}")
-    public ResponseEntity<String> eliminarUsuario(@PathVariable long id) {
+    public ResponseEntity<String> eliminarUsuario(@PathVariable @Min(1) long id) {
         try {
             Optional<Usuario> usuarioExistente = usuarioServ.getUsuarioById(id);
             if (usuarioExistente.isPresent()) {
@@ -135,7 +137,7 @@ public class ApiController {
     @PreAuthorize("hasAuthority('LEER_TOPICO')")
     @ResponseBody
     @GetMapping("/topicos/listarTopicoPorIdRespuestas/{id}")
-    public ResponseEntity<TopicoRespuestas> listarTopicoPorIdRespuestas(@PathVariable Long id,
+    public ResponseEntity<TopicoRespuestas> listarTopicoPorIdRespuestas(@PathVariable @Min(1) Long id,
                                              @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
          try {
              Optional<Topico> topicoOpt = topicoRepo.findById(id);
@@ -177,7 +179,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ACTUALIZAR_TOPICO')")
     @PutMapping("/topicos/actualizarTopicoId/{id}")
-    public ResponseEntity<Topico> actualizarTopico(@PathVariable long id, @Valid @RequestBody TopicoDto topicoDto) {
+    public ResponseEntity<Topico> actualizarTopico(@PathVariable @Min(1) long id, @Valid @RequestBody TopicoDto topicoDto) {
         try {
             Optional<Topico> topicoExistente = topicoServ.getTopicoById(id);
             if (topicoExistente.isPresent()) {
@@ -200,7 +202,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ELIMINAR_TOPICO')")
     @DeleteMapping("/topicos/eliminarTopicoId/{id}")
-    public ResponseEntity<String> eliminarTopico(@PathVariable long id) {
+    public ResponseEntity<String> eliminarTopico(@PathVariable @Min(1) long id) {
         try {
             Optional<Topico> topicoExistente = topicoServ.getTopicoById(id);
             if (topicoExistente.isPresent()) {
@@ -225,7 +227,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('CREAR_RESPUESTAS')")
     @PostMapping("/respuestas/crearRespuesta/{id}")
-    public ResponseEntity<Respuestas> crearRespuesta(@PathVariable long id, @Valid @RequestBody RespuestasDto respuestaDto) {
+    public ResponseEntity<Respuestas> crearRespuesta(@PathVariable @Min(1) long id, @Valid @RequestBody RespuestasDto respuestaDto) {
         try {
             Topico topico = topicoRepo.findById(id);
             topico.setStatus(Status.Resuelto);
@@ -244,7 +246,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ACTUALIZAR_RESPUESTAS')")
     @PutMapping("/respuestas/actualizarRespuestaId/{id}")
-    public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable long id, @Valid @RequestBody RespuestasDto respuestaDto) {
+    public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable @Min(1) long id, @Valid @RequestBody RespuestasDto respuestaDto) {
         try {
             Optional<Respuestas> respuestaExistente = respuestaServ.getRespuestaById(id);
             if (respuestaExistente.isPresent()) {
@@ -269,7 +271,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ELIMINAR_RESPUESTAS')")
     @DeleteMapping("/respuestas/eliminarRespuestaId/{id}")
-    public ResponseEntity<String> eliminarRespuesta(@PathVariable long id) {
+    public ResponseEntity<String> eliminarRespuesta(@PathVariable @Min(1) long id) {
         try {
             Optional<Respuestas> respuestaExistente = respuestaServ.getRespuestaById(id);
             if (respuestaExistente.isPresent()) {

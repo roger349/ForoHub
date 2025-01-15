@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .sessionManagement(se -> se.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/login", "/registrarUsuario").permitAll()
-                        .requestMatchers("/swagger-ui", "/v3/api-docs","/swagger-ui.html").permitAll()
+                        .requestMatchers( "/v3/api-docs/**","/v3/api-docs", "/swagger-ui/**","/swagger-ui/index.html").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException)

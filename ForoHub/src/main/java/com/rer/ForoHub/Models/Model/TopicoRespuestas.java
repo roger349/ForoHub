@@ -7,27 +7,27 @@ import java.util.List;
 public class TopicoRespuestas {
 
         private List<Respuestas> respuestas;
-        private int totalPages;
-        private long totalElements;
-        private int pageNumber;
-        private int pageSize;
+        private int totalPaginas;
+        private long totalElementos;
+        private int numeroPagina;
+        private int tamañoPagina;
 
         public TopicoRespuestas(Page<Respuestas> respuestasPage) {
 
             this.respuestas = respuestasPage.getContent();
-            this.totalPages = respuestasPage.getTotalPages();
-            this.totalElements = respuestasPage.getTotalElements();
-            this.pageNumber = respuestasPage.getNumber();
-            this.pageSize = respuestasPage.getSize();
+            this.totalPaginas = respuestasPage.getTotalPages();
+            this.totalElementos = respuestasPage.getTotalElements();
+            this.numeroPagina = respuestasPage.getNumber();
+            this.tamañoPagina = respuestasPage.getSize();
         }
         public List<Respuestas> getRespuestas() {return respuestas;}
         public void setRespuestas(List<Respuestas> respuestas) {this.respuestas = respuestas;}
-        public int getTotalPages() {return totalPages;}
-        public void setTotalPages(int totalPages) {this.totalPages = totalPages;}
-        public long getTotalElements() {return totalElements;}
-        public void setTotalElements(long totalElements) {this.totalElements = totalElements;}
-        public int getPageNumber() {return pageNumber;}
-        public void setPageNumber(int pageNumber) {this.pageNumber = pageNumber;}
-        public int getPageSize() {return pageSize;}
-        public void setPageSize(int pageSize) {this.pageSize = pageSize;}
+        public int getTotalPaginas() {return totalPaginas;}
+        public void setTotalPaginas(int totalPaginas) {this.totalPaginas = totalPaginas;}
+        public long getTotalElementos() {return totalElementos;}
+        public void setTotalElementos(long totalElementos) {this.totalElementos = totalElementos;}
+        public int getNumeroPagina() {return numeroPagina;}
+        public void setNumeroPagina(int numeroPagina) {this.numeroPagina = numeroPagina;}
+        public int getTamañoPagina() {return tamañoPagina;}
+        public void setTamañoPagina(int tamañoPagina) {this.tamañoPagina = tamañoPagina;}
 }

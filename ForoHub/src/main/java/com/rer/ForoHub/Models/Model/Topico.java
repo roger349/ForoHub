@@ -46,7 +46,6 @@ public class Topico {
 
     public Topico(){
     }
-
     public Topico(String titulo, String mensaje, String fecha_creacion_topico,
                   Status status, Categorias categoria , Usuario autor) {
         this.titulo = titulo;

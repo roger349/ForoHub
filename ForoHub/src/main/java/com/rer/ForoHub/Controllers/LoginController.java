@@ -10,6 +10,7 @@ import com.rer.ForoHub.Repository.UsuarioRepository;
 import com.rer.ForoHub.Security.Authenticar;
 import com.rer.ForoHub.Security.JwtUtil;
 import com.rer.ForoHub.Services.UsuarioService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class LoginController {
 
     @Transactional
     @PostMapping("/registrarUsuario")
-    public ResponseEntity<Usuario> registrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Usuario> registrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         try {
 
             boolean existeAdmin = usuarioServ.existeAdministrador();
