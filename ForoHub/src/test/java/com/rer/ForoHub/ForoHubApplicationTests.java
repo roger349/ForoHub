@@ -9,5 +9,4 @@ class ForoHubApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

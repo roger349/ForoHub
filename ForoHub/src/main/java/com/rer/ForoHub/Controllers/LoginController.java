@@ -2,6 +2,8 @@ package com.rer.ForoHub.Controllers;
 
 import com.rer.ForoHub.Errores.AdminAlreadyExistsException;
 import com.rer.ForoHub.Errores.ErrorResponse;
+import com.rer.ForoHub.Errores.Mensaje;
+import com.rer.ForoHub.Errores.UsuarioExistenteException;
 import com.rer.ForoHub.Models.Dto.LoginDTO;
 import com.rer.ForoHub.Models.Dto.UsuarioDTO;
 import com.rer.ForoHub.Models.Dto.tokenDTO;
@@ -17,10 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
@@ -44,32 +42,27 @@ public class LoginController {
 
     @Transactional
     @PostMapping("/registrarUsuario")
-    public ResponseEntity<Usuario> registrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Mensaje> registrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         try {
 
             boolean existeAdmin = usuarioServ.existeAdministrador();
             String rol= usuarioDTO.rolDto().name().toUpperCase();
             if (existeAdmin && "ADMIN".equals(rol)) {
-
                 throw new AdminAlreadyExistsException("El usuario con rol ADMIN ya existe.");
-
-            } else {
-                Usuario usuario = new Usuario(usuarioDTO.contraseñaDto(),
-                        usuarioDTO.nombreUsuarioDto(),usuarioDTO.correoElectronicoDto(), usuarioDTO.rolDto());
-                Usuario user = usuarioServ.crearUsuario(usuario);
-                return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            }
+            else {
+                    Usuario usuario = new Usuario(usuarioDTO.contraseñaDto(),
+                    usuarioDTO.nombreUsuarioDto(), usuarioDTO.correoElectronicoDto(), usuarioDTO.rolDto());
+                    ResponseEntity<Mensaje> user = usuarioServ.crearUsuario(usuario);
+                    throw new UsuarioExistenteException("El usuario ya existe");
             }
         }
         catch (AdminAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
-        }
-        catch (Exception e) {
-            logger.error("Error del servidor", e);
-            throw new RuntimeException("Error al crear el Usuario", e);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> authenticate(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<Map<String, String>> autenticar(@RequestBody LoginDTO loginDTO) {
         try {
             String username = loginDTO.username();
             String password = loginDTO.password();
@@ -78,12 +71,12 @@ public class LoginController {
             Map<String, String> response = new HashMap<>();
             response.put("token", jwt);
             response.put("username", username);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         catch (Exception e) {
-            logger.error("Error del servidor durante la autenticación", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Error del servidor"));
+            logger.error("Error durante la autenticación", e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
         }
     }
 }

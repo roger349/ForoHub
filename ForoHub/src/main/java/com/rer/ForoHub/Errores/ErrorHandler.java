@@ -24,7 +24,6 @@ public class ErrorHandler {
             String mensaje = error.getMessage();
             errores.put(campo, mensaje);
         });
-
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
