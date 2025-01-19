@@ -14,16 +14,16 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Datos mal ingresados, verifique el formato de los datos ingresados ");
-    }
     @ExceptionHandler(UsuarioExistenteException.class)
     public ResponseEntity<Mensaje> handleUsuarioExistenteException(UsuarioExistenteException ex) {
         return new ResponseEntity<>(new Mensaje(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body("Datos mal ingresados, Faltantes o nulos");
+    }
+   @ExceptionHandler(Exception.class)
     public ResponseEntity<Mensaje> handleGenericException(Exception ex) {
         return new ResponseEntity<>(new Mensaje("Error interno del servidor"), HttpStatus.INTERNAL_SERVER_ERROR);
     }

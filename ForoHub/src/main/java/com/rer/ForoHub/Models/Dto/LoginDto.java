@@ -3,8 +3,7 @@ package com.rer.ForoHub.Models.Dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record LoginDTO (
-
+public record LoginDto(
         @NotBlank(message = "El nombre de usuario no debe estar vacío")
         String username,
         @NotBlank(message = "La contraseña no debe estar vacío")

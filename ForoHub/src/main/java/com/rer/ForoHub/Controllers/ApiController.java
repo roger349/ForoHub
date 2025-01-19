@@ -2,6 +2,7 @@ package com.rer.ForoHub.Controllers;
 
 import com.rer.ForoHub.Models.Dto.RespuestasDto;
 import com.rer.ForoHub.Models.Dto.TopicoDto;
+import com.rer.ForoHub.Models.Dto.UsuarioDto;
 import com.rer.ForoHub.Models.Enum.Status;
 import com.rer.ForoHub.Models.Model.Respuestas;
 import com.rer.ForoHub.Models.Model.Topico;
@@ -79,15 +80,15 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ACTUALIZAR_USUARIO')")
     @PutMapping("/usuarios/actualizarUsuarioId/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable @Min(1) long id,@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable @Min(1) long id, @RequestBody UsuarioDto usuarioDto) {
         try {
             Optional<Usuario> usuarioExistente = usuarioServ.getUsuarioById(id);
             if (usuarioExistente.isPresent()) {
                 Usuario usuarioActual = usuarioExistente.get();
-                if (usuario.getContraseña() != null) {usuarioActual.setContraseña(usuario.getContraseña());}
-                if (usuario.getNombre_usuario() != null) {usuarioActual.setNombre_usuario(usuario.getNombre_usuario());}
-                if (usuario.getCorreo_Electronico() != null) {usuarioActual.setCorreo_Electronico(usuario.getCorreo_Electronico());}
-                if (usuario.getRol() != null) {usuarioActual.setRol(usuario.getRol());}
+                if (usuarioDto.contraseñaDto() != null) {usuarioActual.setContraseña(usuarioDto.contraseñaDto());}
+                if (usuarioDto.nombreUsuarioDto() != null) {usuarioActual.setNombre_usuario(usuarioDto.nombreUsuarioDto());}
+                if (usuarioDto.correoElectronicoDto() != null) {usuarioActual.setCorreo_Electronico(usuarioDto.correoElectronicoDto());}
+                if (usuarioDto.rolDto() != null) {usuarioActual.setRol(usuarioDto.rolDto());}
                 Usuario usuarioActualizado = usuarioServ.saveUsuario(usuarioActual);
                 return ResponseEntity.ok(usuarioActualizado);
             }
@@ -135,7 +136,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('CREAR_TOPICO')")
     @PostMapping("/topicos/crearTopico")
-    public ResponseEntity<Topico> crearTopico(@Valid @RequestBody TopicoDto topicoDto) {
+    public ResponseEntity<Topico> crearTopico(@RequestBody @Valid TopicoDto topicoDto) {
         try {
             SecurityContext securityContext = SecurityContextHolder.getContext();
             Authentication authentication = securityContext.getAuthentication();
@@ -158,7 +159,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ACTUALIZAR_TOPICO')")
     @PutMapping("/topicos/actualizarTopicoId/{id}")
-    public ResponseEntity<Topico> actualizarTopico(@PathVariable @Min(1) long id, @Valid @RequestBody TopicoDto topicoDto) {
+    public ResponseEntity<Topico> actualizarTopico(@PathVariable @Min(1) long id, @RequestBody  TopicoDto topicoDto) {
         try {
             Optional<Topico> topicoExistente = topicoServ.getTopicoById(id);
             if (topicoExistente.isPresent()) {
@@ -206,7 +207,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('CREAR_RESPUESTAS')")
     @PostMapping("/respuestas/crearRespuesta/{id}")
-    public ResponseEntity<Respuestas> crearRespuesta(@PathVariable @Min(1) long id, @Valid @RequestBody RespuestasDto respuestaDto) {
+    public ResponseEntity<Respuestas> crearRespuesta(@PathVariable @Min(1) long id,  @RequestBody @Valid RespuestasDto respuestaDto) {
         try {
             Topico topico = topicoRepo.findById(id);
             topico.setStatus(Status.Resuelto);
@@ -225,7 +226,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ACTUALIZAR_RESPUESTAS')")
     @PutMapping("/respuestas/actualizarRespuestaId/{id}")
-    public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable @Min(1) long id, @Valid @RequestBody RespuestasDto respuestaDto) {
+    public ResponseEntity<Respuestas> actualizarRespuesta(@PathVariable @Min(1) long id, @RequestBody RespuestasDto respuestaDto) {
         try {
             Optional<Respuestas> respuestaExistente = respuestaServ.getRespuestaById(id);
             if (respuestaExistente.isPresent()) {

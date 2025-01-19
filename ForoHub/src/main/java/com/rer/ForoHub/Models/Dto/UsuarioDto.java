@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record UsuarioDTO(
+public record UsuarioDto(
 
         @NotBlank(message = "La contraseña no debe estar vacío")
         @Size(min = 6, message = "La contraseña debe tener 6 o mas caracteres")
@@ -19,7 +19,7 @@ public record UsuarioDTO(
         @NotNull(message = "El rol no debe estar vacío, debe contener: USUARIO o ADMIN")
         Roles rolDto) {
 
-        public UsuarioDTO(String contraseñaDto, String nombreUsuarioDto, String correoElectronicoDto, Roles rolDto) {
+        public UsuarioDto(String contraseñaDto, String nombreUsuarioDto, String correoElectronicoDto, Roles rolDto) {
 
         this.contraseñaDto = contraseñaDto;
         this.nombreUsuarioDto = nombreUsuarioDto;

@@ -1,11 +1,11 @@
 package com.rer.ForoHub.Controllers;
 
 import com.rer.ForoHub.Errores.AdminAlreadyExistsException;
-import com.rer.ForoHub.Errores.ErrorResponse;
+
 import com.rer.ForoHub.Errores.Mensaje;
 import com.rer.ForoHub.Errores.UsuarioExistenteException;
-import com.rer.ForoHub.Models.Dto.LoginDTO;
-import com.rer.ForoHub.Models.Dto.UsuarioDTO;
+import com.rer.ForoHub.Models.Dto.LoginDto;
+import com.rer.ForoHub.Models.Dto.UsuarioDto;
 import com.rer.ForoHub.Models.Dto.tokenDTO;
 import com.rer.ForoHub.Models.Model.Usuario;
 import com.rer.ForoHub.Repository.UsuarioRepository;
@@ -26,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin(origins = "http://localhost:8082")
 public class LoginController {
     @Autowired
     Authenticar authenticar;
@@ -42,7 +43,7 @@ public class LoginController {
 
     @Transactional
     @PostMapping("/registrarUsuario")
-    public ResponseEntity<Mensaje> registrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Mensaje> registrarUsuario(@RequestBody @Valid UsuarioDto usuarioDTO) {
         try {
 
             boolean existeAdmin = usuarioServ.existeAdministrador();
@@ -62,7 +63,7 @@ public class LoginController {
         }
     }
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> autenticar(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<Map<String, String>> autenticar(@RequestBody @Valid LoginDto loginDTO) {
         try {
             String username = loginDTO.username();
             String password = loginDTO.password();

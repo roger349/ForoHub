@@ -19,9 +19,11 @@ public enum Roles {
     USUARIO(Permisos.CREAR_TOPICO,
             Permisos.LEER_TOPICO,
             Permisos.ACTUALIZAR_TOPICO,
+            Permisos.ELIMINAR_TOPICO,
             Permisos.LEER_RESPUESTAS,
             Permisos.CREAR_RESPUESTAS,
-            Permisos.ACTUALIZAR_RESPUESTAS);
+            Permisos.ACTUALIZAR_RESPUESTAS,
+            Permisos.ELIMINAR_RESPUESTAS);
 
     private final List<Permisos> permisos;
     Roles(Permisos... permisos) {

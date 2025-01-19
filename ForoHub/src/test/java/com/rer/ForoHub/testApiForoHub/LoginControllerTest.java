@@ -2,8 +2,8 @@ package com.rer.ForoHub.testApiForoHub;
 
 import com.rer.ForoHub.Controllers.LoginController;
 import com.rer.ForoHub.Errores.Mensaje;
-import com.rer.ForoHub.Models.Dto.LoginDTO;
-import com.rer.ForoHub.Models.Dto.UsuarioDTO;
+import com.rer.ForoHub.Models.Dto.LoginDto;
+import com.rer.ForoHub.Models.Dto.UsuarioDto;
 import com.rer.ForoHub.Models.Enum.Roles;
 import com.rer.ForoHub.Models.Model.Usuario;
 import com.rer.ForoHub.Repository.UsuarioRepository;
@@ -63,7 +63,7 @@ public class LoginControllerTest {
     @Test
     void testRegistrarUsuario_AdminAlreadyExists() throws Exception {
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO("rogerA10781078", "rogerAdmin",
+        UsuarioDto usuarioDTO = new UsuarioDto("rogerA10781078", "rogerAdmin",
                 "roger@mail.com", Roles.ADMIN);
 
         Mockito.when(usuarioServ.existeAdministrador()).thenReturn(true);
@@ -80,7 +80,7 @@ public class LoginControllerTest {
     @Test
     void testRegistrarUsuario_Success() throws Exception {
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO("rogerAdmin", "rogerA10781078",
+        UsuarioDto usuarioDTO = new UsuarioDto("rogerAdmin", "rogerA10781078",
                 "usuario1@mail.com", Roles.ADMIN);
 
         Mockito.when(usuarioServ.existeAdministrador()).thenReturn(false);
@@ -96,7 +96,7 @@ public class LoginControllerTest {
     }
     @Test
     void testAuthenticate_Success() throws Exception {
-        LoginDTO loginDTO = new LoginDTO("rogerAdmin", "rogerA10781078");
+        LoginDto loginDTO = new LoginDto("rogerAdmin", "rogerA10781078");
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBQ1RVQUxJWkFSX1JFU1BVRVNUQVMiLCJBQ1RVQUxJWkFSX1RPUElDTyIsIkFDVFVBTElaQVJfVVNVQVJJTyIsIkNSRUFSX1JFU1BVRVNUQVMiLCJDUkVBUl9UT1BJQ08iLCJDUkVBUl9VU1VBUklPIiwiRUxJTUlOQVJfUkVTUFVFU1RBUyIsIkVMSU1JTkFSX1RPUElDTyIsIkVMSU1JTkFSX1VTVUFSSU8iLCJMRUVSX1JFU1BVRVNUQVMiLCJMRUVSX1RPUElDTyIsIkxFRVJfVVNVQVJJTyJdLCJ1c2VybmFtZSI6InJvZ2VyQWRtaW4iLCJzdWIiOiJyb2dlckFkbWluIiwiaWF0IjoxNzM3MTcyNjE5LCJleHAiOjE3MzcxNzk4MTl9.7MFwewUrLk5vqcfZEuzfAWV7VkPiTREakZPbTXXrEuc";
 
         Mockito.when(authenticar.loginValidacion(anyString(), anyString())).thenReturn(token);
