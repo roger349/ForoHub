@@ -1,7 +1,6 @@
 package com.rer.ForoHub.Controllers;
 
 import com.rer.ForoHub.Errores.AdminAlreadyExistsException;
-
 import com.rer.ForoHub.Errores.Mensaje;
 import com.rer.ForoHub.Errores.UsuarioExistenteException;
 import com.rer.ForoHub.Models.Dto.LoginDto;
@@ -13,8 +12,6 @@ import com.rer.ForoHub.Security.Authenticar;
 import com.rer.ForoHub.Security.JwtUtil;
 import com.rer.ForoHub.Services.UsuarioService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,27 +36,34 @@ public class LoginController {
     @Autowired
     AuthenticationManager authenticationManager;
 
-    final static Logger logger = LoggerFactory.getLogger(LoginController.class);
-
     @Transactional
     @PostMapping("/registrarUsuario")
     public ResponseEntity<Mensaje> registrarUsuario(@RequestBody @Valid UsuarioDto usuarioDTO) {
         try {
-
             boolean existeAdmin = usuarioServ.existeAdministrador();
             String rol= usuarioDTO.rolDto().name().toUpperCase();
             if (existeAdmin && "ADMIN".equals(rol)) {
-                throw new AdminAlreadyExistsException("El usuario con rol ADMIN ya existe.");
+
+                throw new AdminAlreadyExistsException("El usuario ADMIN ya existe, solo existe un ADMIN");
             }
             else {
+                if (usuarioRepo.findByNombre_usuario(usuarioDTO.nombreUsuarioDto()) != null) {
+
+                     throw new UsuarioExistenteException("El usuario ya existe, no se permite nombre de usuario repetido");
+                }
+                else {
                     Usuario usuario = new Usuario(usuarioDTO.contraseñaDto(),
                     usuarioDTO.nombreUsuarioDto(), usuarioDTO.correoElectronicoDto(), usuarioDTO.rolDto());
-                    ResponseEntity<Mensaje> user = usuarioServ.crearUsuario(usuario);
-                    throw new UsuarioExistenteException("El usuario ya existe");
+                    Usuario user = usuarioServ.crearUsuario(usuario);
+                    return ResponseEntity.status(HttpStatus.CREATED).build();
+                }
             }
         }
+        catch (UsuarioExistenteException e) {
+            return new ResponseEntity<>(new Mensaje(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
         catch (AdminAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return new ResponseEntity<>(new Mensaje(e.getMessage()), HttpStatus.FORBIDDEN);
         }
     }
     @PostMapping("/login")
@@ -75,9 +79,7 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         catch (Exception e) {
-            logger.error("Error durante la autenticación", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
         }
     }
 }

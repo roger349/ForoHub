@@ -1,30 +1,33 @@
 package com.rer.ForoHub.Errores;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AdminAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleAdminAlreadyExists(AdminAlreadyExistsException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+    public ResponseEntity<ErrorResponse> handleAdminAlreadyExists(AdminAlreadyExistsException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(UsuarioExistenteException.class)
-    public ResponseEntity<Mensaje> handleUsuarioExistenteException(UsuarioExistenteException ex) {
-        return new ResponseEntity<>(new Mensaje(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Mensaje> handleUsuarioExistenteException(UsuarioExistenteException e) {
+        return new ResponseEntity<>(new Mensaje(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body("Datos mal ingresados, Faltantes o nulos");
-    }
-   @ExceptionHandler(Exception.class)
-    public ResponseEntity<Mensaje> handleGenericException(Exception ex) {
-        return new ResponseEntity<>(new Mensaje("Error interno del servidor"), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Mensaje> handleValidationExceptions(MethodArgumentNotValidException e) {
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        String errorMessage = fieldError != null ? fieldError.getDefaultMessage() : "Error desconocido";
+        return new ResponseEntity<>(new Mensaje(errorMessage), HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,12 +1,8 @@
 package com.rer.ForoHub.Models.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 
 @Entity
@@ -16,14 +12,14 @@ public class Respuestas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotBlank(message = "No debe estar vacia")
+    //@NotBlank(message = "No debe estar vacia")
     @Column(name = "mensaje_respuestas")
     private String mensaje_respuestas;
-    @NotBlank
-    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "La fecha debe estar en el formato yyyy-MM-dd")
+    //@NotBlank
+    //@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "La fecha debe estar en el formato yyyy-MM-dd")
     @Column(name = "fecha_creacion_respuestas")
     private String fecha_creacion_respuestas;
-    @NotNull(message = "El estado no puede ser nulo, tiene que ser true o false")
+    //@NotNull(message = "El estado no puede ser nulo, tiene que ser true o false")
     @Column(name = "estado")
     private Boolean estado;
     @JsonIgnore

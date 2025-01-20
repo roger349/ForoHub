@@ -1,15 +1,11 @@
 package com.rer.ForoHub.Models.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rer.ForoHub.Models.Enum.Categorias;
 import com.rer.ForoHub.Models.Enum.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import java.util.List;
 
@@ -20,20 +16,20 @@ public class Topico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotBlank(message = "El titulo no debe estar vacio")
+    //@NotBlank(message = "El titulo no debe estar vacio")
     @Column(name = "titulo")
     private String titulo;
-    @NotBlank(message = "El contenido no debe estar vacio")
+    //@NotBlank(message = "El contenido no debe estar vacio")
     @Column(name = "mensaje")
     private String mensaje;
-    @NotBlank
-    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "La fecha debe estar en el formato yyyy-MM-dd")
+    //@NotBlank
+    //@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "La fecha debe estar en el formato yyyy-MM-dd")
     @Column(name = "fecha_creacion_topico")
     private String fecha_creacion_topico;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
-    @NotNull(message ="Programacion, BackEnd, FrontEnd, DataScience, DevOps" )
+    //@NotNull(message ="Programacion, BackEnd, FrontEnd, DataScience, DevOps" )
     @Column(name="categoria")
     @Enumerated(EnumType.STRING)
     private Categorias categoria;

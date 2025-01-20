@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rer.ForoHub.Models.Enum.Roles;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import java.util.List;
 
@@ -18,19 +14,19 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotBlank(message = "La contraseña no debe estar vacío")
-    @Size(min = 6, message = "La contraseña debe tener 6 o mas caracteres")
+    //@NotBlank(message = "La contraseña no debe estar vacío")
+    //@Size(min = 6, message = "La contraseña debe tener 6 o mas caracteres")
     @Column(name = "contraseña")
     private String contraseña;
-    @NotBlank(message = "El nombre de usuario no debe estar vacío")
+    //@NotBlank(message = "El nombre de usuario no debe estar vacío")
     @Column(name = "nombre_usuario")
     private String nombre_usuario;
-    @NotBlank(message = "El correo electronico no debe estar vacío")
-    @Email(message = "El correo electronico debe ser válido")
+    //@NotBlank(message = "El correo electronico no debe estar vacío")
+    //@Email(message = "El correo electronico debe ser válido")
     @Column(name = "correo_electronico")
     private String correo_Electronico;
+    //@NotNull(message = "El rol no debe estar vacío, debe contener: USUARIO o ADMIN")
     @Column(name="rol")
-    @NotNull(message = "El rol no debe estar vacío, debe contener: USUARIO o ADMIN")
     @Enumerated(EnumType.STRING)
     private Roles rol;
     @JsonIgnore

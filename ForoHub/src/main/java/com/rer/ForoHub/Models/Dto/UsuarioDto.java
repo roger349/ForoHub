@@ -25,6 +25,5 @@ public record UsuarioDto(
         this.nombreUsuarioDto = nombreUsuarioDto;
         this.correoElectronicoDto = correoElectronicoDto;
         this.rolDto = rolDto;
-
         }
 }

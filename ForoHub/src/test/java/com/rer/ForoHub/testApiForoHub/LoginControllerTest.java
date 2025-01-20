@@ -1,7 +1,6 @@
 package com.rer.ForoHub.testApiForoHub;
 
 import com.rer.ForoHub.Controllers.LoginController;
-import com.rer.ForoHub.Errores.Mensaje;
 import com.rer.ForoHub.Models.Dto.LoginDto;
 import com.rer.ForoHub.Models.Dto.UsuarioDto;
 import com.rer.ForoHub.Models.Enum.Roles;
@@ -74,8 +73,7 @@ public class LoginControllerTest {
                                 "\"correoElectronicoDto\":\"roger@mail.com\",\"rolDto\":\"ADMIN\"}")
                         .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBQ1RVQUxJWkFSX1JFU1BVRVNUQVMiLCJBQ1RVQUxJWkFSX1RPUElDTyIsIkFDVFVBTElaQVJfVVNVQVJJTyIsIkNSRUFSX1JFU1BVRVNUQVMiLCJDUkVBUl9UT1BJQ08iLCJDUkVBUl9VU1VBUklPIiwiRUxJTUlOQVJfUkVTUFVFU1RBUyIsIkVMSU1JTkFSX1RPUElDTyIsIkVMSU1JTkFSX1VTVUFSSU8iLCJMRUVSX1JFU1BVRVNUQVMiLCJMRUVSX1RPUElDTyIsIkxFRVJfVVNVQVJJTyJdLCJ1c2VybmFtZSI6InJvZ2VyQWRtaW4iLCJzdWIiOiJyb2dlckFkbWluIiwiaWF0IjoxNzM3MTcyNjE5LCJleHAiOjE3MzcxNzk4MTl9.7MFwewUrLk5vqcfZEuzfAWV7VkPiTREakZPbTXXrEuc"))
                 .andExpect(status().isOk())
-                .andDo(print());;
-               // .andExpect(jsonPath("$.error").value("El usuario con rol ADMIN ya existe."));
+                .andDo(print());
     }
     @Test
     void testRegistrarUsuario_Success() throws Exception {
@@ -84,8 +82,8 @@ public class LoginControllerTest {
                 "usuario1@mail.com", Roles.ADMIN);
 
         Mockito.when(usuarioServ.existeAdministrador()).thenReturn(false);
-        Mockito.when(usuarioServ.crearUsuario(any(Usuario.class)))
-                .thenReturn(new ResponseEntity<>(new Mensaje("Usuario creado exitosamente"), HttpStatus.CREATED));
+       // Mockito.when(usuarioServ.crearUsuario(any(Usuario.class)))
+         //       .thenReturn(new ResponseEntity<>(HttpStatus.CREATED));
 
         mockMvc.perform(post("/registrarUsuario")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -105,8 +103,7 @@ public class LoginControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"rogerAdmin\",\"password\":\"rogerA10781078\"}"))
                         .andExpect(status().isOk())
-                        .andDo(print());;
-                        //.andExpect(jsonPath("$.token").value(token));
+                        .andDo(print());
     }
     @Test
     void testAuthenticate_Failure() throws Exception {
@@ -117,8 +114,7 @@ public class LoginControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"rogerAdmin\",\"password\":\"roger10781078\"}"))
                 .andExpect(status().isOk())
-                .andDo(print());;
-                //.andExpect(jsonPath("$.error").value("Error del servidor"));
+                .andDo(print());
     }
 }
 
