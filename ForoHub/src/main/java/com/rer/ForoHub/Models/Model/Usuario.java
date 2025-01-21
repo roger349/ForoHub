@@ -30,7 +30,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Roles rol;
     @JsonIgnore
-    @OneToMany(mappedBy = "autor")
+    @OneToMany(mappedBy = "autor",cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Topico> topicos;
 

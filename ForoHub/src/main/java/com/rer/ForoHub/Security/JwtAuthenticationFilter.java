@@ -5,8 +5,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,8 +21,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -39,23 +35,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                    LOGGER.info("Autenticación exitosa para el usuario {}", username);
                 }
                 else
                 {
-                    LOGGER.warn("Token no válido");
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token no válido");
                     return;
                 }
             }
             catch (JwtException e) {
-                LOGGER.error("Error al validar el token", e);
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token no válido");
                 return;
             }
             catch (IllegalArgumentException e) {
-                LOGGER.error("Error al procesar el token", e);
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Token no válido");
                 return;
             }

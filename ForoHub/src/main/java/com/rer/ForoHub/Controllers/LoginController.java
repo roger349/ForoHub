@@ -79,7 +79,10 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            Map<String, String> response1 = new HashMap<>();
+            response1.put("Credenciales Invalidas", loginDTO.username());
+            response1.put("password", loginDTO.password());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response1);
         }
     }
 }

@@ -38,7 +38,7 @@ public class Topico {
     @JoinColumn(name = "autor_id")
     @JsonManagedReference
     private Usuario autor;
-    @OneToMany(mappedBy = "topico")
+    @OneToMany(mappedBy = "topico",cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Respuestas> respuestas;
 

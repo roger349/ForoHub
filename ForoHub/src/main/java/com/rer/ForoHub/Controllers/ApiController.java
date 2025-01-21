@@ -159,7 +159,7 @@ public class ApiController {
     @Transactional
     @PreAuthorize("hasAuthority('ACTUALIZAR_TOPICO')")
     @PutMapping("/topicos/actualizarTopicoId/{id}")
-    public ResponseEntity<Topico> actualizarTopico(@PathVariable @Min(1) long id, @RequestBody  TopicoDto topicoDto) {
+    public ResponseEntity<Topico> actualizarTopico(@PathVariable @Min(1) long id, @RequestBody TopicoDto topicoDto) {
         try {
             Optional<Topico> topicoExistente = topicoServ.getTopicoById(id);
             if (topicoExistente.isPresent()) {

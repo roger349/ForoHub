@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record TopicoDto(
+
         @NotBlank(message = "El titulo no debe estar vacio")
         String titulo,
         @NotBlank(message = "El contenido no debe estar vacio")
